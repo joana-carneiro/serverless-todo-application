@@ -4,6 +4,8 @@ service:
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
 
 provider:
   name: aws
@@ -33,6 +35,12 @@ provider:
 
 custom:
   topicName: imagesTopic-joana-${self:provider.stage}
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Serverless TODOs API
+        description: Serverless application for tasks management
 
 functions:
 
@@ -48,20 +56,14 @@ functions:
           path: todos
           cors: true
 
-  # TODO: Configure this function
-#  CreateTodo:
-#    handler: src/lambda/http/createTodo.handler
-#    events:
-#      - http:
-#          method: post
-#          path: todos
-#          cors: true
-#          reqValidatorName: RequestBodyValidator
-#          documentation:
-#            summary: Create a new todo
-#            description: Create a new todo
-#            requestModels:
-#              'application/json': TodoRequest
+  # TODO: Configure this function --> missing Auth for now
+  CreateTodo:
+    handler: src/lambda/http/createTodo.handler
+    events:
+      - http:
+          method: post
+          path: todos
+          cors: true
 
   # TODO: Configure this function
 #  UpdateTodo:
