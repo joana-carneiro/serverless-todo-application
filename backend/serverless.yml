@@ -91,13 +91,14 @@ functions:
           cors: true
 
 
-#  # TODO: Configure this function
-#  GenerateUploadUrl:
-#    handler: src/lambda/http/generateUploadUrl.handler
-#    events:
-#      - http:
-#          method: post
-#          path: todos/{todoId}/attachment
+  # TODO: Configure this function
+  GenerateUploadUrl:
+    handler: src/lambda/http/generateUploadUrl.handler
+    events:
+      - http:
+          method: post
+          path: todos/{todoId}/attachment
+          cors: true
 
 resources:
   Resources:
