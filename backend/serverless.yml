@@ -27,6 +27,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:DeleteItem
+        - dynamodb:UpdateItem
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
     - Effect: Allow
       Action:
@@ -52,7 +53,7 @@ functions:
 #  Auth:
 #    handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function --> missing Auth for now
+  # TODO: Configure this function --> missing auth
   GetTodos:
     handler: src/lambda/http/getTodos.handler
     events:
@@ -61,7 +62,7 @@ functions:
           path: todos
           cors: true
 
-  # TODO: Configure this function --> missing Auth for now
+  # TODO: Configure this function --> missing auth
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -70,16 +71,17 @@ functions:
           path: todos
           cors: true
 
-  # TODO: Configure this function
-#  UpdateTodo:
-#    handler: src/lambda/http/updateTodo.handler
-#    events:
-#      - http:
-#          method: patch
-#          path: todos/{todoId}
-#
+  # TODO: Configure this function --> missing auth
+  UpdateTodo:
+    handler: src/lambda/http/updateTodo.handler
+    events:
+      - http:
+          method: patch
+          path: todos/{todoId}
+          cors: true
 
-# TODO: Configure this function --> missing auth
+
+  # TODO: Configure this function --> missing auth
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
