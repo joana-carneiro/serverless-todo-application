@@ -1,10 +1,26 @@
 import 'source-map-support/register'
-
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+import {createLogger} from "../../utils/logger";
+import {uploadImage} from "../../businessLogic/manageTodos"
 
-  // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-  return undefined
+
+const logger = createLogger('generateUploadURL')
+
+export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+
+  logger.info('Processing event: ', event)
+
+  const signedUrl = await uploadImage(event)
+
+  return {
+    statusCode: 202,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
+    body: JSON.stringify({
+      uploadUrl: signedUrl
+    })
+  };
 }
