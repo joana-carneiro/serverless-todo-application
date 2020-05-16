@@ -6,10 +6,12 @@ import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import AppTodos from "../dataLayer/appTodos";
 import {UpdateTodoRequest} from "../requests/UpdateTodoRequest";
 import * as AWS from "aws-sdk";
+import * as AWSXRay from 'aws-xray-sdk';
 
+const XAWS = AWSXRay.captureAWS(AWS);
 const applicationData = new AppTodos();
 
-const s3 = new AWS.S3({
+const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 const bucketName = process.env.ATTACHMENTS_S3_BUCKET
