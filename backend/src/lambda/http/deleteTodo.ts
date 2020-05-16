@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import {createLogger} from "../../utils/logger";
-import {deleteTodo} from "../../services/manageTodos"
+import {deleteTodo} from "../../businessLogic/manageTodos"
 
 const logger = createLogger('createToDos')
 

@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import { parseUserId } from '../auth/utils'
 import * as uuid from 'uuid'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
-import AppTodos from "../data/appTodos";
+import AppTodos from "../dataLayer/appTodos";
 import {UpdateTodoRequest} from "../requests/UpdateTodoRequest";
 import * as AWS from "aws-sdk";
 

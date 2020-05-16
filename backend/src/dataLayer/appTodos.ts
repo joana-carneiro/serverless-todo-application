@@ -1,18 +1,25 @@
 import 'source-map-support/register'
 import * as AWS  from 'aws-sdk'
+//import * as AWSXRay from 'aws-xray-sdk';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
-const docClient = new AWS.DynamoDB.DocumentClient()
-const todosTable = process.env.TODOS_TABLE
-const todosIdIndex = process.env.TODOS_ID_INDEX
+
+//const XAWS = AWSXRay.captureAWS(AWS);
 
 export default class AppTodos {
+
+    constructor(
+        private readonly docClient : DocumentClient = new AWS.DynamoDB.DocumentClient(),
+        private readonly todosTable = process.env.TODOS_TABLE,
+        private readonly todosIdIndex = process.env.TODOS_ID_INDEX
+    ) {}
 
     //retrieve all the todos for a given user id
     async getUserTodos(userId) {
 
-        const result = await docClient.query({
-            TableName: todosTable,
-            IndexName: todosIdIndex,
+        const result = await this.docClient.query({
+            TableName: this.todosTable,
+            IndexName: this.todosIdIndex,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
                 ':userId': userId
@@ -25,8 +32,8 @@ export default class AppTodos {
     //return a spefic item with a given id for a specific user
     async getUserSpecificTodo(userId, todoId) {
 
-        const result = await docClient.get({
-            TableName: todosTable,
+        const result = await this.docClient.get({
+            TableName: this.todosTable,
             Key: {
                 todoId,
                 userId
@@ -39,8 +46,8 @@ export default class AppTodos {
 
     async deleteItem (userId, todoId) {
 
-        await docClient.delete({
-            TableName: todosTable,
+        await this.docClient.delete({
+            TableName: this.todosTable,
             Key: {
                 todoId,
                 userId
@@ -51,8 +58,8 @@ export default class AppTodos {
     //create a new item for the user
     async createTodo(item) {
 
-        await docClient.put({
-            TableName: todosTable,
+        await this.docClient.put({
+            TableName: this.todosTable,
             Item: item
         }).promise();
     }
@@ -60,8 +67,8 @@ export default class AppTodos {
     //update a given item that belongs to a given user
     async updateTodo(userId,todoId,updatedTodo) {
 
-        await docClient.update({
-            TableName: todosTable,
+        await this.docClient.update({
+            TableName: this.todosTable,
             Key: {
                 todoId,
                 userId
@@ -83,8 +90,8 @@ export default class AppTodos {
     //update image URL for a given item
     async updateImageURL(userId, todoId, attachmentUrl){
 
-        await docClient.update({
-            TableName: todosTable,
+        await this.docClient.update({
+            TableName: this.todosTable,
             Key: {
                 todoId,
                 userId
