@@ -19,6 +19,7 @@ provider:
     TODOS_ID_INDEX: UserIdIndex
     ATTACHMENTS_S3_BUCKET: serverless-todo-attachments-joana-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
+    AUTH_0_SECRET: -6sOC5pGAhWqd_ZnV0WxNSPqJadPnTsyX9AZWLQE22_2jaSCR-N3KUksMf7C4oX2
 
   iamRoleStatements:
     - Effect: Allow

@@ -2,12 +2,15 @@ import { CustomAuthorizerEvent, CustomAuthorizerResult } from 'aws-lambda'
 import 'source-map-support/register'
 
 //import { verify, decode } from 'jsonwebtoken'
+import { verify} from 'jsonwebtoken'
 import { createLogger } from '../../utils/logger'
 //import Axios from 'axios'
 //import { Jwt } from '../../auth/Jwt'
-//import { JwtPayload } from '../../auth/JwtPayload'
+import { JwtPayload } from '../../auth/JwtPayload'
 
 const logger = createLogger('auth')
+
+const auth0Secret = process.env.AUTH_0_SECRET
 
 // TODO: Provide a URL that can be used to download a certificate that can be used
 // to verify JWT token signature.
@@ -23,8 +26,7 @@ export const handler = async (
     logger.info('User was authorized', jwtToken)
 
     return {
-//      principalId: jwtToken.sub,
-      principalId: 'user',
+      principalId: jwtToken.sub,
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -55,23 +57,13 @@ export const handler = async (
   }
 }
 
-// async function verifyToken(authHeader: string): Promise<JwtPayload> {
-
-async function verifyToken(authHeader: string) {
+async function verifyToken(authHeader: string): Promise<JwtPayload> {
 
   const token = getToken(authHeader)
   //const jwt: Jwt = decode(token, { complete: true }) as Jwt
 
-  if (token != 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Rldi0wYzdzYmJyYi5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWViZTlkYTdmNmViY2UwYzVhMDM5ZTE3IiwiYXVkIjoiUFUya3VDYjZ3dzVaZWN0dFR3bUc3ZUxKT2FUQ2puaGwiLCJpYXQiOjE1ODk1NzAxNjAsImV4cCI6MTU5Mzg5MDE2MCwiYXRfaGFzaCI6ImNiSzJmblM2bE1sSzFTTmI1QmFXb2ciLCJub25jZSI6IkRCSzluUkpLYVhrSHJ1Mjc3ZFhDdURQUm95VUhmaGszIn0.QhBAoIBaPdBjViO9FGQyklVgZCGNXj7uflIsQZlJNnA')
-    throw new Error('Invalid token')
+  return verify(token, auth0Secret) as JwtPayload
 
-
-  return token
-
-  // TODO: Implement token verification
-  // You should implement it similarly to how it was implemented for the exercise for the lesson 5
-  // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
-  //return undefined
 }
 
 function getToken(authHeader: string): string {
