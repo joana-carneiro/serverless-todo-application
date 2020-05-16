@@ -2,10 +2,13 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import * as AWS  from 'aws-sdk'
 import {parseUserId} from "../../auth/utils";
+import {createLogger} from "../../utils/logger";
 
 const s3 = new AWS.S3({
   signatureVersion: 'v4'
 })
+
+const logger = createLogger('generateUploadURL')
 
 const bucketName = process.env.ATTACHMENTS_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
@@ -14,6 +17,7 @@ const todosTable = process.env.TODOS_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
+  logger.info('Processing event: ', event)
   const todoId = event.pathParameters.todoId
 
   const authorization = event.headers.Authorization

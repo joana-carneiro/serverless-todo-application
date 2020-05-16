@@ -2,12 +2,16 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import * as AWS from "aws-sdk";
 import {parseUserId} from "../../auth/utils";
+import {createLogger} from "../../utils/logger";
 
 const docClient = new AWS.DynamoDB.DocumentClient()
 const todosTable = process.env.TODOS_TABLE
 
+const logger = createLogger('createToDos')
+
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
+  logger.info('Processing event: ', event)
   const todoId = event.pathParameters.todoId
 
   const authorization = event.headers.Authorization

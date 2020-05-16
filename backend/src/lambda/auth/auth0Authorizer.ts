@@ -20,10 +20,10 @@ const jwksUrl = 'https://dev-0c7sbbrb.auth0.com/pem'
 export const handler = async (
   event: CustomAuthorizerEvent
 ): Promise<CustomAuthorizerResult> => {
-  console.log('Authorizing a user', event.authorizationToken)
+  logger.info('Authorizing a user', event.authorizationToken)
   try {
     const jwtToken = await verifyToken(event.authorizationToken)
-    console.log('User was authorized', jwtToken)
+    logger.info('User was authorized', jwtToken)
 
     return {
       principalId: jwtToken.sub,
